@@ -173,7 +173,7 @@ export default function Services() {
         {/* Breadcrumb */}
         <nav className="mb-8 text-sm text-gray-600">
           <Link href="/" className="hover:text-gov-blue">Home</Link>
-          <span className="mx-2">></span>
+          <span className="mx-2">&gt;</span>
           <span className="text-gray-900">Servizi</span>
         </nav>
 
@@ -195,7 +195,7 @@ export default function Services() {
             </Button>
             <Button variant="ghost">
               <Clock className="h-4 w-4 mr-2" />
-              Rapidi (< 10 min)
+              Rapidi (&lt; 10 min)
             </Button>
             <Button variant="ghost">
               <Euro className="h-4 w-4 mr-2" />

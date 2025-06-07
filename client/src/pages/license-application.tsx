@@ -83,9 +83,9 @@ export default function LicenseApplication() {
         {/* Breadcrumb */}
         <nav className="mb-8 text-sm text-gray-600">
           <Link href="/" className="hover:text-gov-blue">Home</Link>
-          <span className="mx-2">></span>
+          <span className="mx-2">&gt;</span>
           <Link href="/services" className="hover:text-gov-blue">Servizi</Link>
-          <span className="mx-2">></span>
+          <span className="mx-2">&gt;</span>
           <span className="text-gray-900">Richiesta Patente</span>
         </nav>
 
