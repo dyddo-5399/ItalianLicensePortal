@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(210, 100%, 25%);
+  --primary-foreground: hsl(0, 0%, 98%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+  
+  /* Italian Government Colors */
+  --gov-blue: hsl(210, 100%, 25%);
+  --gov-light-blue: hsl(210, 100%, 40%);
+  --italian-green: hsl(140, 100%, 28%);
+  --italian-red: hsl(355, 78%, 48%);
+  --italian-white: hsl(0, 0%, 100%);
+  --gov-gray: hsl(210, 17%, 97%);
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(210, 100%, 40%);
+  --primary-foreground: hsl(0, 0%, 98%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .gov-blue {
+    background-color: var(--gov-blue);
+  }
+  
+  .gov-light-blue {
+    background-color: var(--gov-light-blue);
+  }
+  
+  .italian-green {
+    background-color: var(--italian-green);
+  }
+  
+  .italian-red {
+    background-color: var(--italian-red);
+  }
+  
+  .gov-gray {
+    background-color: var(--gov-gray);
+  }
+  
+  .text-gov-blue {
+    color: var(--gov-blue);
+  }
+  
+  .text-gov-light-blue {
+    color: var(--gov-light-blue);
+  }
+  
+  .text-italian-green {
+    color: var(--italian-green);
+  }
+  
+  .text-italian-red {
+    color: var(--italian-red);
+  }
+  
+  .border-gov-blue {
+    border-color: var(--gov-blue);
+  }
+  
+  .border-italian-green {
+    border-color: var(--italian-green);
+  }
+  
+  .hover\:bg-gov-blue:hover {
+    background-color: var(--gov-blue);
+  }
+  
+  .hover\:bg-italian-green:hover {
+    background-color: var(--italian-green);
+  }
+  
+  .focus\:ring-gov-blue:focus {
+    --tw-ring-color: var(--gov-blue);
+  }
+  
+  .focus\:border-gov-blue:focus {
+    border-color: var(--gov-blue);
+  }
+}
