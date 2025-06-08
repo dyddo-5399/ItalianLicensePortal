@@ -15,6 +15,8 @@ import {
   type LicenseStatus,
   type InsertLicenseStatus,
 } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   // User operations
@@ -213,4 +215,178 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Database Storage Implementation
+export class DatabaseStorage implements IStorage {
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
+  }
+
+  async getUserByFiscalCode(fiscalCode: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.fiscalCode, fiscalCode));
+    return user || undefined;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
+    return user;
+  }
+
+  async createLicenseApplication(insertApplication: InsertLicenseApplication): Promise<LicenseApplication> {
+    const practiceNumber = `PA${new Date().getFullYear()}${String(Date.now()).slice(-8)}`;
+    const [application] = await db
+      .insert(licenseApplications)
+      .values({
+        ...insertApplication,
+        practiceNumber,
+        status: insertApplication.status || "In Elaborazione",
+        documents: insertApplication.documents || null,
+        notes: insertApplication.notes || null,
+      })
+      .returning();
+    return application;
+  }
+
+  async getLicenseApplication(practiceNumber: string): Promise<LicenseApplication | undefined> {
+    const [application] = await db
+      .select()
+      .from(licenseApplications)
+      .where(eq(licenseApplications.practiceNumber, practiceNumber));
+    return application || undefined;
+  }
+
+  async getLicenseApplicationsByUserId(userId: number): Promise<LicenseApplication[]> {
+    return await db
+      .select()
+      .from(licenseApplications)
+      .where(eq(licenseApplications.userId, userId));
+  }
+
+  async updateLicenseApplicationStatus(practiceNumber: string, status: string, notes?: string): Promise<LicenseApplication | undefined> {
+    const [application] = await db
+      .update(licenseApplications)
+      .set({ 
+        status, 
+        notes,
+        updatedAt: new Date() 
+      })
+      .where(eq(licenseApplications.practiceNumber, practiceNumber))
+      .returning();
+    return application || undefined;
+  }
+
+  async createLicenseRenewal(insertRenewal: InsertLicenseRenewal): Promise<LicenseRenewal> {
+    const practiceNumber = `PR${new Date().getFullYear()}${String(Date.now()).slice(-8)}`;
+    const [renewal] = await db
+      .insert(licenseRenewals)
+      .values({
+        ...insertRenewal,
+        practiceNumber,
+        status: insertRenewal.status || "In Elaborazione",
+        documents: insertRenewal.documents || null,
+        medicalCertificate: insertRenewal.medicalCertificate || null,
+      })
+      .returning();
+    return renewal;
+  }
+
+  async getLicenseRenewal(practiceNumber: string): Promise<LicenseRenewal | undefined> {
+    const [renewal] = await db
+      .select()
+      .from(licenseRenewals)
+      .where(eq(licenseRenewals.practiceNumber, practiceNumber));
+    return renewal || undefined;
+  }
+
+  async getLicenseRenewalsByUserId(userId: number): Promise<LicenseRenewal[]> {
+    return await db
+      .select()
+      .from(licenseRenewals)
+      .where(eq(licenseRenewals.userId, userId));
+  }
+
+  async updateLicenseRenewalStatus(practiceNumber: string, status: string): Promise<LicenseRenewal | undefined> {
+    const [renewal] = await db
+      .update(licenseRenewals)
+      .set({ 
+        status,
+        updatedAt: new Date() 
+      })
+      .where(eq(licenseRenewals.practiceNumber, practiceNumber))
+      .returning();
+    return renewal || undefined;
+  }
+
+  async createAppointment(insertAppointment: InsertAppointment): Promise<Appointment> {
+    const [appointment] = await db
+      .insert(appointments)
+      .values({
+        ...insertAppointment,
+        status: insertAppointment.status || "Programmato",
+      })
+      .returning();
+    return appointment;
+  }
+
+  async getAppointmentsByUserId(userId: number): Promise<Appointment[]> {
+    return await db
+      .select()
+      .from(appointments)
+      .where(eq(appointments.userId, userId));
+  }
+
+  async updateAppointmentStatus(id: number, status: string): Promise<Appointment | undefined> {
+    const [appointment] = await db
+      .update(appointments)
+      .set({ status })
+      .where(eq(appointments.id, id))
+      .returning();
+    return appointment || undefined;
+  }
+
+  async getLicenseStatus(licenseNumber: string): Promise<LicenseStatus | undefined> {
+    const [status] = await db
+      .select()
+      .from(licenseStatus)
+      .where(eq(licenseStatus.licenseNumber, licenseNumber));
+    return status || undefined;
+  }
+
+  async getLicenseStatusByUserId(userId: number): Promise<LicenseStatus | undefined> {
+    const [status] = await db
+      .select()
+      .from(licenseStatus)
+      .where(eq(licenseStatus.userId, userId));
+    return status || undefined;
+  }
+
+  async createLicenseStatus(insertStatus: InsertLicenseStatus): Promise<LicenseStatus> {
+    const [status] = await db
+      .insert(licenseStatus)
+      .values({
+        ...insertStatus,
+        points: insertStatus.points || 20,
+        isValid: insertStatus.isValid !== undefined ? insertStatus.isValid : true,
+        violations: insertStatus.violations || null,
+      })
+      .returning();
+    return status;
+  }
+
+  async updateLicensePoints(licenseNumber: string, points: number): Promise<LicenseStatus | undefined> {
+    const [status] = await db
+      .update(licenseStatus)
+      .set({ 
+        points,
+        updatedAt: new Date() 
+      })
+      .where(eq(licenseStatus.licenseNumber, licenseNumber))
+      .returning();
+    return status || undefined;
+  }
+}
+
+export const storage = new DatabaseStorage();

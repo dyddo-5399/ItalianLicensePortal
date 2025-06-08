@@ -1,5 +1,6 @@
 import { pgTable, text, serial, integer, boolean, timestamp, numeric } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
+import { relations } from "drizzle-orm";
 import { z } from "zod";
 
 export const users = pgTable("users", {
@@ -107,3 +108,39 @@ export type InsertAppointment = z.infer<typeof insertAppointmentSchema>;
 
 export type LicenseStatus = typeof licenseStatus.$inferSelect;
 export type InsertLicenseStatus = z.infer<typeof insertLicenseStatusSchema>;
+
+// Relations
+export const usersRelations = relations(users, ({ many }) => ({
+  licenseApplications: many(licenseApplications),
+  licenseRenewals: many(licenseRenewals),
+  appointments: many(appointments),
+  licenseStatus: many(licenseStatus),
+}));
+
+export const licenseApplicationsRelations = relations(licenseApplications, ({ one }) => ({
+  user: one(users, {
+    fields: [licenseApplications.userId],
+    references: [users.id],
+  }),
+}));
+
+export const licenseRenewalsRelations = relations(licenseRenewals, ({ one }) => ({
+  user: one(users, {
+    fields: [licenseRenewals.userId],
+    references: [users.id],
+  }),
+}));
+
+export const appointmentsRelations = relations(appointments, ({ one }) => ({
+  user: one(users, {
+    fields: [appointments.userId],
+    references: [users.id],
+  }),
+}));
+
+export const licenseStatusRelations = relations(licenseStatus, ({ one }) => ({
+  user: one(users, {
+    fields: [licenseStatus.userId],
+    references: [users.id],
+  }),
+}));
