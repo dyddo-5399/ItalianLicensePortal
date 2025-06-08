@@ -94,6 +94,9 @@ export class MemStorage implements IStorage {
       practiceNumber,
       submittedAt: new Date(),
       updatedAt: new Date(),
+      status: insertApplication.status || "In Elaborazione",
+      documents: insertApplication.documents || null,
+      notes: insertApplication.notes || null,
     };
     this.licenseApplications.set(practiceNumber, application);
     return application;
@@ -126,6 +129,9 @@ export class MemStorage implements IStorage {
       practiceNumber,
       submittedAt: new Date(),
       updatedAt: new Date(),
+      status: insertRenewal.status || "In Elaborazione",
+      documents: insertRenewal.documents || null,
+      medicalCertificate: insertRenewal.medicalCertificate || null,
     };
     this.licenseRenewals.set(practiceNumber, renewal);
     return renewal;
@@ -155,6 +161,7 @@ export class MemStorage implements IStorage {
       ...insertAppointment,
       id,
       createdAt: new Date(),
+      status: insertAppointment.status || "Programmato",
     };
     this.appointments.set(id, appointment);
     return appointment;
@@ -187,6 +194,9 @@ export class MemStorage implements IStorage {
       ...insertStatus,
       id,
       updatedAt: new Date(),
+      points: insertStatus.points || 20,
+      isValid: insertStatus.isValid !== undefined ? insertStatus.isValid : true,
+      violations: insertStatus.violations || null,
     };
     this.licenseStatuses.set(insertStatus.licenseNumber, status);
     return status;

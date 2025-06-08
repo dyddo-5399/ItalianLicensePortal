@@ -13,10 +13,10 @@ export default function Footer() {
   ];
 
   const legalLinks = [
-    { href: "#", label: t("footer.privacy") },
-    { href: "#", label: t("footer.cookies") },
-    { href: "#", label: t("footer.legal") },
-    { href: "#", label: t("footer.accessibility") }
+    { href: "#privacy", label: t("footer.privacy") },
+    { href: "#cookies", label: t("footer.cookies") },
+    { href: "#legal", label: t("footer.legal") },
+    { href: "#accessibility", label: t("footer.accessibility") }
   ];
 
   return (
